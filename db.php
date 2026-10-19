@@ -1,10 +1,12 @@
 <?php
-$host = 'localhost';
-$user = 'root';      // Default user Laragon
-$pass = '';          // Default password Laragon (kosong)
-$dbname = 'nacsa';
+$host = getenv('DB_HOST') ?: 'localhost';
+$user = getenv('DB_USERNAME') ?: 'root';
+$pass = getenv('DB_PASSWORD') ?: '';
+$dbname = getenv('DB_NAME') ?: 'nacsa';
+$port = getenv('DB_PORT') ?: 3306;
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+// Sambungkan ke MySQL dengan menyertakan nombor port
+$conn = new mysqli($host, $user, $pass, $dbname, (int)$port);
 
 if ($conn->connect_error) {
     die("Sambungan ke pangkalan data gagal: " . $conn->connect_error);
@@ -12,7 +14,6 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8mb4");
 
-// Fungsi bantu untuk tukar tarikh biasa ke format Bahasa Melayu (Contoh: 16 Oktober 2026)
 function formatTarikhMelayu($tarikh) {
     $bulan = [
         1 => 'Januari', 2 => 'Februari', 3 => 'Mac', 4 => 'April',
